@@ -1,0 +1,13 @@
+VcXsrv o altro client X11
+
+Come avviare VcXsrv:
+Seleziona “Multiple windows”: Questo ti permette di avere le finestre X11 separate e non in modalità fullscreen
+Seleziona “Start no client”: Questo avvia VcXsrv senza un client predefinito
+Assicurati di abilitare "Disable access control" per evitare problemi di autorizzazione
+Completa la configurazione e avvia VcXsrv.
+
+Configurare la variabile DISPLAY (da terminale):
+export DISPLAY=host.docker.internal:0
+
+Avviare utilizzando il comando:
+docker-compose up --build

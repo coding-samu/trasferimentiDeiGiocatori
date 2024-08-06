@@ -71,7 +71,8 @@ class IndovinaGiocatore(App):
         scrollview.add_widget(label)
         layout.add_widget(scrollview)
 
-        popup = Popup(title='Trasferimenti Giocatore', content=layout, size_hint=(None, None), size=(500, 500))
+        # Utilizza size_hint per rendere il popup responsive
+        popup = Popup(title='Trasferimenti Giocatore', content=layout, size_hint=(0.8, 0.8))
         popup.open()
 
     def mostraSoluzione(self, instance):
@@ -82,7 +83,8 @@ class IndovinaGiocatore(App):
         label = Label(text=messaggio, font_size='18sp', color='#ff0000')
         layout.add_widget(label)
 
-        popup = Popup(title='Errore', content=layout, size_hint=(None, None), size=(400, 200))
+        # Utilizza size_hint per rendere il popup responsive
+        popup = Popup(title='Errore', content=layout, size_hint=(0.6, 0.4))
         popup.open()
 
 IndovinaGiocatore().run()

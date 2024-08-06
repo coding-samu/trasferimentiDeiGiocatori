@@ -53,7 +53,7 @@ class IndovinaGiocatore(App):
             self.etichetta.text = "Fai click su prossimo per iniziare ..."
         except requests.exceptions.RequestException as e:
             self.etichetta.text = "Errore di connessione. Controlla la tua rete e riprova."
-            self.mostraPopupErrore(str(e))
+            self.mostraPopupErrore("Errore di connessione")
 
     def trovaTrasferimentiGiocatore(self, instance):
         if len(self.diz) > 0:

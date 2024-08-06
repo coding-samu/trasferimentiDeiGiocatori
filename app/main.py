@@ -36,17 +36,24 @@ class IndovinaGiocatore(App):
         self.soluzioneB.bind(on_press=self.mostraSoluzione)
 
         self.url = "https://raw.githubusercontent.com/SamueleQuaresima/trasferimentiDeiGiocatori/main/players.json"
-        self.r = requests.get(self.url)
-        self.diz = self.r.json()
-
+        self.diz = {}
         self.soluzione = "Devi prima iniziare"
+        
+        # Prima volta, tenta di scaricare i dati
+        self.aggiornaLista(None)
+        
         return self.window
 
     def aggiornaLista(self, instance):
-        self.r = requests.get(self.url)
-        self.diz = self.r.json()
-        self.soluzione = "Devi prima iniziare"
-        self.etichetta.text = "Fai click su prossimo per iniziare ..."
+        try:
+            self.r = requests.get(self.url)
+            self.r.raise_for_status()  # Questo genera un'eccezione per codici di stato HTTP non 200
+            self.diz = self.r.json()
+            self.soluzione = "Devi prima iniziare"
+            self.etichetta.text = "Fai click su prossimo per iniziare ..."
+        except requests.exceptions.RequestException as e:
+            self.etichetta.text = "Errore di connessione. Controlla la tua rete e riprova."
+            self.mostraPopupErrore(str(e))
 
     def trovaTrasferimentiGiocatore(self, instance):
         if len(self.diz) > 0:
@@ -69,5 +76,13 @@ class IndovinaGiocatore(App):
 
     def mostraSoluzione(self, instance):
         self.etichetta.text = self.soluzione
+
+    def mostraPopupErrore(self, messaggio):
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        label = Label(text=messaggio, font_size='18sp', color='#ff0000')
+        layout.add_widget(label)
+
+        popup = Popup(title='Errore', content=layout, size_hint=(None, None), size=(400, 200))
+        popup.open()
 
 IndovinaGiocatore().run()

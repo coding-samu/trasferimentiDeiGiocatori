@@ -38,7 +38,6 @@ class IndovinaGiocatore(App):
         self.url = "https://raw.githubusercontent.com/SamueleQuaresima/trasferimentiDeiGiocatori/main/players.json"
         self.diz = {}
 
-        # Prima volta, tenta di scaricare i dati
         self.aggiornaLista(None)
         
         return self.window
@@ -47,7 +46,7 @@ class IndovinaGiocatore(App):
         self.prossimo.text = "Inizia"
         try:
             self.r = requests.get(self.url)
-            self.r.raise_for_status()  # Questo genera un'eccezione per codici di stato HTTP non 200
+            self.r.raise_for_status()
             self.diz = self.r.json()
             self.soluzione = "Devi prima iniziare"
             self.transfers_layout.clear_widgets()
@@ -65,14 +64,17 @@ class IndovinaGiocatore(App):
             self.soluzione = Label(
                 text="Hai completato la lista!\nPer continuare a giocare fai click su aggiorna",
                 font_size='18sp',
-                color='#ffffff'
+                color='#ffffff',
+                size_hint_y=None,
+                height=30,
+                halign='center',
+                text_size=(Window.width * 0.8, None)
             )
-            self.soluzione.bind(size=self.soluzione.setter('text_size'))
-            self.transfers_layout.add_widget(self.soluzione)  # Mostra la soluzione al posto dei trasferimenti
+            self.transfers_layout.add_widget(self.soluzione)
 
     def mostraTrasferimenti(self, trasferimenti):
         self.transfers_layout.clear_widgets()
-        trasferimenti.reverse()  # Inverti l'ordine dei trasferimenti
+        trasferimenti.reverse()
         for trasferimento in trasferimenti:
             stagione_label = Label(
                 text=f"Stagione:",
@@ -80,18 +82,18 @@ class IndovinaGiocatore(App):
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            stagione_label.bind(size=stagione_label.setter('text_size'))
             stagione_value = Label(
                 text=f"{trasferimento['season']}",
                 font_size='16sp',
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            stagione_value.bind(size=stagione_value.setter('text_size'))
 
             vecchio_club_label = Label(
                 text=f"Vecchio Club:",
@@ -99,18 +101,18 @@ class IndovinaGiocatore(App):
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            vecchio_club_label.bind(size=vecchio_club_label.setter('text_size'))
             vecchio_club_value = Label(
                 text=f"{trasferimento['old_club']}",
                 font_size='16sp',
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            vecchio_club_value.bind(size=vecchio_club_value.setter('text_size'))
 
             nuovo_club_label = Label(
                 text=f"Nuovo Club:",
@@ -118,18 +120,18 @@ class IndovinaGiocatore(App):
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            nuovo_club_label.bind(size=nuovo_club_label.setter('text_size'))
             nuovo_club_value = Label(
                 text=f"{trasferimento['new_club']}",
                 font_size='16sp',
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            nuovo_club_value.bind(size=nuovo_club_value.setter('text_size'))
 
             fee_label = Label(
                 text=f"Tipo:",
@@ -137,21 +139,37 @@ class IndovinaGiocatore(App):
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            fee_label.bind(size=fee_label.setter('text_size'))
             fee_value = Label(
                 text=f"{trasferimento['fee']}",
                 font_size='16sp',
                 color='#ffffff',
                 size_hint_y=None,
                 height=30,
-                halign='left'  # Allinea il testo a sinistra
+                halign='left',
+                text_size=(Window.width * 0.4, None)
             )
-            fee_value.bind(size=fee_value.setter('text_size'))
 
-            spazio1 = Label(text="", size_hint_y=None, height=30)
-            spazio2 = Label(text="", size_hint_y=None, height=30)
+            space_label = Label(
+                text=f"---",
+                font_size='16sp',
+                color='#ffffff',
+                size_hint_y=None,
+                height=30,
+                halign='left',
+                text_size=(Window.width * 0.4, None)
+            )
+            space_value = Label(
+                text=f"---",
+                font_size='16sp',
+                color='#ffffff',
+                size_hint_y=None,
+                height=30,
+                halign='left',
+                text_size=(Window.width * 0.4, None)
+            )
 
             self.transfers_layout.add_widget(stagione_label)
             self.transfers_layout.add_widget(stagione_value)
@@ -161,20 +179,20 @@ class IndovinaGiocatore(App):
             self.transfers_layout.add_widget(nuovo_club_value)
             self.transfers_layout.add_widget(fee_label)
             self.transfers_layout.add_widget(fee_value)
-            self.transfers_layout.add_widget(spazio1)
-            self.transfers_layout.add_widget(spazio2)
+            self.transfers_layout.add_widget(space_label)
+            self.transfers_layout.add_widget(space_value)
 
     def mostraSoluzione(self, instance):
-        self.transfers_layout.clear_widgets()  # Pulisci l'elenco dei trasferimenti
+        self.transfers_layout.clear_widgets()
         soluzione_label = Label(
             text=self.soluzione,
             font_size='18sp',
             color='#ffffff',
-            size_hint=(1, None),
+            size_hint_y=None,
             height=30,
-            halign='center'
+            halign='center',
+            text_size=(Window.width * 0.8, None)
         )
-        soluzione_label.bind(size=soluzione_label.setter('text_size'))
-        self.transfers_layout.add_widget(soluzione_label)  # Mostra la soluzione al posto dei trasferimenti
+        self.transfers_layout.add_widget(soluzione_label)
 
 IndovinaGiocatore().run()

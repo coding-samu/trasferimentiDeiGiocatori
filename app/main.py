@@ -5,6 +5,8 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
+from kivy.uix.popup import Popup
+from kivy.uix.widget import Widget
 from random import choice
 import requests
 
@@ -51,7 +53,19 @@ class IndovinaGiocatore(App):
             self.soluzione = "Devi prima iniziare"
             self.transfers_layout.clear_widgets()
         except requests.exceptions.RequestException as e:
-            self.soluzione.text = "Errore di connessione. Controlla la tua rete e riprova."
+            self.mostraErroreConnessione()
+
+    def mostraErroreConnessione(self):
+        content = BoxLayout(orientation='vertical')
+        content.add_widget(Label(text="Errore di connessione.", font_size='18sp'))
+        popup = Popup(title='Errore di Connessione',
+                      content=content,
+                      size_hint=(None, None), 
+                      size=(300, 200))
+        chiudi_btn = Button(text="Chiudi", size_hint_y=None, height=40)
+        chiudi_btn.bind(on_press=popup.dismiss)
+        content.add_widget(chiudi_btn)
+        popup.open()
 
     def trovaTrasferimentiGiocatore(self, instance):
         self.prossimo.text = "Prossimo"

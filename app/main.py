@@ -5,8 +5,6 @@ from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
-from kivy.uix.popup import Popup
-from kivy.uix.widget import Widget
 from random import choice
 import requests
 
@@ -46,26 +44,23 @@ class IndovinaGiocatore(App):
 
     def aggiornaLista(self, instance):
         self.prossimo.text = "Inizia"
+        self.transfers_layout.clear_widgets()
         try:
             self.r = requests.get(self.url)
             self.r.raise_for_status()
             self.diz = self.r.json()
             self.soluzione = "Devi prima iniziare"
-            self.transfers_layout.clear_widgets()
         except requests.exceptions.RequestException as e:
-            self.mostraErroreConnessione()
-
-    def mostraErroreConnessione(self):
-        content = BoxLayout(orientation='vertical')
-        content.add_widget(Label(text="Errore di connessione.", font_size='18sp'))
-        popup = Popup(title='Errore di Connessione',
-                      content=content,
-                      size_hint=(None, None), 
-                      size=(300, 200))
-        chiudi_btn = Button(text="Chiudi", size_hint_y=None, height=40)
-        chiudi_btn.bind(on_press=popup.dismiss)
-        content.add_widget(chiudi_btn)
-        popup.open()
+            error_label = Label(
+                text="Errore di connessione.",
+                font_size='18sp',
+                color='#ff0000',  # rosso per segnalare l'errore
+                size_hint_y=None,
+                height=30,
+                halign='center',
+                text_size=(Window.width * 0.8, None)
+            )
+            self.transfers_layout.add_widget(error_label)
 
     def trovaTrasferimentiGiocatore(self, instance):
         self.prossimo.text = "Prossimo"
@@ -198,15 +193,26 @@ class IndovinaGiocatore(App):
 
     def mostraSoluzione(self, instance):
         self.transfers_layout.clear_widgets()
-        soluzione_label = Label(
-            text=self.soluzione,
-            font_size='18sp',
-            color='#ffffff',
-            size_hint_y=None,
-            height=30,
-            halign='center',
-            text_size=(Window.width * 0.8, None)
-        )
+        if not self.diz:
+            soluzione_label = Label(
+                text="Errore: devi prima aggiornare.",
+                font_size='18sp',
+                color='#ff0000',  # rosso per segnalare l'errore
+                size_hint_y=None,
+                height=30,
+                halign='center',
+                text_size=(Window.width * 0.8, None)
+            )
+        else:
+            soluzione_label = Label(
+                text=self.soluzione,
+                font_size='18sp',
+                color='#ffffff',
+                size_hint_y=None,
+                height=30,
+                halign='center',
+                text_size=(Window.width * 0.8, None)
+            )
         self.transfers_layout.add_widget(soluzione_label)
 
 IndovinaGiocatore().run()
